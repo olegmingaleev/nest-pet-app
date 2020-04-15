@@ -1,15 +1,26 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthLocalGuard } from './modules/auth/guards/auth-local.guard';
+import { Request } from 'express';
+import { AuthService } from './modules/auth/auth.service';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
-import { Message } from '@nx-auth-space/api-interfaces';
-
-import { AppService } from './app.service';
+export type User = any;
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private authService: AuthService
+  ) {}
 
-  @Get('hello')
-  getData(): Message {
-    return this.appService.getData();
+  @UseGuards(AuthLocalGuard)
+  @Post('auth/login')
+  login(@Req() req: Request): User {
+    return this.authService.signin(req.user as any);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req) {
+    return req.user;
   }
 }
