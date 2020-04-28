@@ -12,16 +12,20 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  findAll(): Observable<User[]> {
+    return from(this.usersRepository.find());
   }
 
-  findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne(id);
+  findOne(email: string): Observable<User> {
+    return from(this.usersRepository.findOne({email}));
   }
 
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+  /**
+   * TODO
+   * пофиксить return тип
+   */
+  remove(id: string): Observable<any> {
+    return from(this.usersRepository.delete(id));
   }
 
   create(user: CreateUserDto): Observable<User> {
