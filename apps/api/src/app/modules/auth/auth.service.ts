@@ -5,6 +5,10 @@ import { filter, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../users/users.entity';
 
+export class AccessToken {
+  constructor(public access_token: string) {}
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -12,24 +16,15 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  signin(user$: Observable<any>) {
+  getAccessToken(user$: Observable<any>): Observable<AccessToken> {
     return user$.pipe(
-      map(({ email }) => ({
-        access_token: this.jwtService.sign({
-          email
-        })
-      }))
+      map(({ email }) => new AccessToken(this.jwtService.sign({ email })))
     );
   }
 
   validate(email: string, password: string): Observable<User> {
-    return this.usersService.findOne(email).pipe(
-      filter(user => user && user.password === password),
-      map(user => {
-        console.log(user);
-
-        return user || null;
-      })
-    );
+    return this.usersService
+      .findOne(email)
+      .pipe(filter(user => user && user.password === password));
   }
 }
