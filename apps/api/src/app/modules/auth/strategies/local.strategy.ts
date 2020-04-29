@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
-import { UsersService } from '../../users/user.service';
-import { User } from '../../users/user.entity';
-import { from, Observable } from 'rxjs';
+import { User } from '../../users/users.entity';
+import { Observable } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private userService: UsersService
-  ) {
-    super();
+  constructor(private authService: AuthService) {
+    super({
+      usernameField: 'email',
+      passwordField: 'password'
+    });
   }
 
-  validate(uid: string): Observable<User> {
-    return from(this.userService.findOne(uid));
+  validate(email: string, password): Observable<User> {
+    return this.authService.validate(email, password).pipe(tap(console.log));
   }
 }

@@ -7,17 +7,20 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UsersModule } from '../users/users.module';
+import { AUTH_CONFIG } from './auth.consts';
+import { AuthController } from './auth.controller';
 
 @Module({
+  controllers: [AuthController],
   imports: [
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: 'SECRET_KEY', // remove
+      secret: AUTH_CONFIG.jwtSecret, // remove
       signOptions: {
-        expiresIn: '60s'
-      },
-    }),
+        expiresIn: AUTH_CONFIG.expiresIn
+      }
+    })
   ],
   providers: [
     AuthService,

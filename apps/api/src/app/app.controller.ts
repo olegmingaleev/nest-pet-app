@@ -6,16 +6,6 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 @Controller()
 export class AppController {
-  constructor(
-    private authService: AuthService,
-  ) {}
-
-  @UseGuards(AuthLocalGuard)
-  @Post('auth/login')
-  login(@Req() req: Request)  {
-    return this.authService.signin(req.user as any);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req) {

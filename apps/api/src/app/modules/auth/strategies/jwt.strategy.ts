@@ -2,6 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { User } from '../interfaces/user';
+import { AUTH_CONFIG } from '../auth.consts';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -9,14 +10,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'SECRET_KEY',
+      secretOrKey: AUTH_CONFIG.jwtSecret
     });
   }
 
-  validate({ username, sub }: any): User {
+  validate({ email }: any): User {
     return {
-      username,
-      uid: sub.uid
+      email
     };
   }
 }
