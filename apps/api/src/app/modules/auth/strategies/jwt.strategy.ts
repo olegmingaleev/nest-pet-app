@@ -8,7 +8,10 @@ import { AUTH_CONFIG } from '../auth.consts';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        ExtractJwt.fromAuthHeaderWithScheme('jwt')
+      ]),
       ignoreExpiration: false,
       secretOrKey: AUTH_CONFIG.jwtSecret
     });
