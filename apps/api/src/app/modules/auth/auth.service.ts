@@ -23,13 +23,8 @@ export class AuthService {
   }
 
   validate(email: string, password: string): Observable<User> {
-    return this.usersService.findOne(email).pipe(
-      filter(user => user && user.password === password),
-      map(user => {
-        console.log(user);
-
-        return user || null;
-      })
-    );
+    return this.usersService
+      .findOne(email)
+      .pipe(filter(user => user && user.password === password));
   }
 }
