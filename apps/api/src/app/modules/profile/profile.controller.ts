@@ -1,0 +1,23 @@
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ProfileService } from './profile.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+@Controller('profile')
+@UseGuards(JwtAuthGuard)
+export class ProfileController {
+  constructor(private profile: ProfileService) {}
+
+  @Get()
+  getProfile(@Req() { user }) {
+    return user;
+  }
+
+  @Post('password')
+  setPassword(@Req() req, @Body() { curPassword, password }) {
+    return this.profile
+      .setPassword(req.user, curPassword, password)
+      .pipe(catchError(err => of(err)));
+  }
+}

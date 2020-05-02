@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/user.service';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../users/users.entity';
+import { validatePassword } from '../../shared/operators/validate/validate-password';
 
 export class AccessToken {
   constructor(public access_token: string) {}
@@ -23,8 +24,6 @@ export class AuthService {
   }
 
   validate(email: string, password: string): Observable<User> {
-    return this.usersService
-      .findOne(email)
-      .pipe(filter(user => user && user.password === password));
+    return this.usersService.findOne(email).pipe(validatePassword(password));
   }
 }

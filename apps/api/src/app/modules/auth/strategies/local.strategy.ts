@@ -4,7 +4,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { User } from '../../users/users.entity';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
