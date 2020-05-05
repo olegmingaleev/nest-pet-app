@@ -3,8 +3,8 @@ import { UsersService } from '../users/user.service';
 import { UserDto } from '../auth/dto/User.dto';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { validatePassword } from '../../shared/operators/validate/validate-password';
 import { Password } from '../../shared/static/password/password.service';
+import { comparePassword } from '../auth/helpers/compare-password.operator';
 
 export const ExistedUsername = HttpException.createBody(
   'UserDto with this username exist',
@@ -31,7 +31,7 @@ export class ProfileService {
     password: string
   ): Observable<void> {
     return this.usersService.findOne({ email }).pipe(
-      validatePassword(curPassword),
+      comparePassword(curPassword),
       switchMap(user =>
         this.usersService.update(user, {
           password: Password.hash(password)

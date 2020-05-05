@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { compareSync, genSaltSync, hashSync } from 'bcrypt';
+import { compareSync, hashSync } from 'bcrypt';
 
 export class Password {
   private static readonly salt = 10;

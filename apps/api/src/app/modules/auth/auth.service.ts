@@ -4,7 +4,7 @@ import { UsersService } from '../users/user.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../users/users.entity';
-import { validatePassword } from '../../shared/operators/validate/validate-password';
+import { comparePassword } from './helpers/compare-password.operator';
 
 export class AccessToken {
   constructor(public access_token: string) {}
@@ -35,8 +35,6 @@ export class AuthService {
   }
 
   validate(email: string, password: string): Observable<User> {
-    return this.usersService
-      .findOne({ email })
-      .pipe(validatePassword(password));
+    return this.usersService.findOne({ email }).pipe(comparePassword(password));
   }
 }
