@@ -10,8 +10,8 @@ export class ProfileController {
   constructor(private profile: ProfileService) {}
 
   @Get()
-  getProfile(@Req() { user }) {
-    return user;
+  getProfile(@Req() req) {
+    return this.profile.getProfile(req.user);
   }
 
   @Post('password')

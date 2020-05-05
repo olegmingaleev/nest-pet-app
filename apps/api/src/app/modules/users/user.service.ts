@@ -17,8 +17,8 @@ export class UsersService {
     return from(this.usersRepository.find());
   }
 
-  findOne(user: Partial<User>): Observable<User> {
-    return from(this.usersRepository.findOne(user));
+  findOne(user: Partial<User>, options?: any): Observable<User> {
+    return from(this.usersRepository.findOne(user, options));
   }
 
   /**
@@ -36,7 +36,7 @@ export class UsersService {
 
   update(user: User, entity: Partial<User>): Observable<void> {
     return from(
-      this.usersRepository.save({
+      this.create({
         ...user,
         // TODO Исправить типы
         ...(entity as any)

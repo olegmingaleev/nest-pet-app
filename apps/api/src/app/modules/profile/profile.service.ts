@@ -15,6 +15,15 @@ export const ExistedUsername = HttpException.createBody(
 export class ProfileService {
   constructor(private usersService: UsersService) {}
 
+  getProfile({ uid }: User) {
+    return this.usersService.findOne(
+      { uid },
+      {
+        select: ['email', 'uid', 'username']
+      }
+    );
+  }
+
   setPassword(
     { email }: User,
     curPassword: string,

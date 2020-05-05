@@ -19,7 +19,18 @@ export class AuthService {
 
   getAccessToken(user$: Observable<any>): Observable<AccessToken> {
     return user$.pipe(
-      map(({ email }) => new AccessToken(this.jwtService.sign({ email })))
+      map(
+        ({ email, username, uid }) =>
+          new AccessToken(
+            this.jwtService.sign({
+              email,
+              sub: {
+                username,
+                uid
+              }
+            })
+          )
+      )
     );
   }
 
