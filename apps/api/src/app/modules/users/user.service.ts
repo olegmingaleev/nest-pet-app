@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { from, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
+import { Password } from '../../shared/static/password/password.service';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +32,12 @@ export class UsersService {
 
   create(user: CreateUserDto): Observable<User> {
     // TODO Добавить шаги для проверки пользователя до обращения к базе
-    return from(this.usersRepository.save(user));
+    return from(
+      this.usersRepository.save({
+        ...user,
+        password: Password.hash(user.password)
+      })
+    );
   }
 
   update(user: User, entity: Partial<User>): Observable<void> {

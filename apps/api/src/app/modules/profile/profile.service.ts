@@ -4,6 +4,7 @@ import { User } from '../auth/interfaces/user';
 import { mergeMap, switchMap } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 import { validatePassword } from '../../shared/operators/validate/validate-password';
+import { Password } from '../../shared/static/password/password.service';
 
 export const ExistedUsername = HttpException.createBody(
   'User with this username exist',
@@ -33,7 +34,7 @@ export class ProfileService {
       validatePassword(curPassword),
       mergeMap(user =>
         this.usersService.update(user, {
-          password
+          password: Password.hash(password)
         })
       )
     );

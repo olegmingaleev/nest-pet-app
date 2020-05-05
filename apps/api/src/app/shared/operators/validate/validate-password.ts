@@ -2,6 +2,7 @@ import { mergeMap } from 'rxjs/operators';
 import { MonoTypeOperatorFunction, of, throwError } from 'rxjs';
 import { User } from '../../../modules/users/users.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { Password } from '../../static/password/password.service';
 
 export const WrongPassword = HttpException.createBody(
   'Wrong login or password',
@@ -15,7 +16,7 @@ export function validatePassword(
   return input$ =>
     input$.pipe(
       mergeMap<User, User | any>(user =>
-        user && user.password === password
+        user && Password.compare(password, user.password)
           ? of(user)
           : throwError(WrongPassword)
       )
