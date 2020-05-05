@@ -17,8 +17,8 @@ export class UsersService {
     return from(this.usersRepository.find());
   }
 
-  findOne(email: string): Observable<User> {
-    return from(this.usersRepository.findOne({ email }));
+  findOne(user: Partial<User>): Observable<User> {
+    return from(this.usersRepository.findOne(user));
   }
 
   /**
@@ -30,16 +30,17 @@ export class UsersService {
   }
 
   create(user: CreateUserDto): Observable<User> {
+    // TODO Добавить шаги для проверки пользователя до обращения к базе
     return from(this.usersRepository.save(user));
   }
 
   update(user: User, entity: Partial<User>): Observable<void> {
     return from(
-      this.usersRepository.update(
-        user,
+      this.usersRepository.save({
+        ...user,
         // TODO Исправить типы
-        entity as any
-      )
+        ...(entity as any)
+      })
     ).pipe(mapTo(undefined));
   }
 

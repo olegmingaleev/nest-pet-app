@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate({ email }: any): User {
+  validate({ email }: any): Partial<User> {
     return {
       email
     };

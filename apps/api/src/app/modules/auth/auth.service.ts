@@ -24,6 +24,8 @@ export class AuthService {
   }
 
   validate(email: string, password: string): Observable<User> {
-    return this.usersService.findOne(email).pipe(validatePassword(password));
+    return this.usersService
+      .findOne({ email })
+      .pipe(validatePassword(password));
   }
 }

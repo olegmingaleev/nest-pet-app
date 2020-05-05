@@ -20,4 +20,11 @@ export class ProfileController {
       .setPassword(req.user, curPassword, password)
       .pipe(catchError(err => of(err)));
   }
+
+  @Post('username')
+  setUsername(@Req() req, @Body() { username }) {
+    return this.profile
+      .setUsername(req.user, username)
+      .pipe(catchError(err => of(err)));
+  }
 }

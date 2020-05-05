@@ -2,11 +2,17 @@ import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryColumn( {
+  @PrimaryColumn({
     unique: true
-  }) email: string;
+  })
+  email: string;
   @PrimaryColumn() password: string;
 
   @PrimaryGeneratedColumn('uuid')
   uid: number;
+
+  @Column({
+    unique: true
+  })
+  username: string;
 }

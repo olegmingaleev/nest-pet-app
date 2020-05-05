@@ -9,7 +9,9 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post('create')
-  register(@Body() { email, password }): Observable<User> {
-    return this.usersService.create(new CreateUserDto(email, password));
+  register(@Body() { username, email, password }): Observable<User> {
+    return this.usersService.create(
+      new CreateUserDto(username, email, password)
+    );
   }
 }
