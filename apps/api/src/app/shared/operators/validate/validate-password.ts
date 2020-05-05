@@ -4,9 +4,9 @@ import { User } from '../../../modules/users/users.entity';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Password } from '../../static/password/password.service';
 
-export const WrongPassword = HttpException.createBody(
+export const WrongPasswordException = HttpException.createBody(
   'Wrong login or password',
-  undefined,
+  'Unauthorized',
   HttpStatus.UNAUTHORIZED
 );
 
@@ -18,7 +18,7 @@ export function validatePassword(
       mergeMap<User, User | any>(user =>
         user && Password.compare(password, user.password)
           ? of(user)
-          : throwError(WrongPassword)
+          : throwError(WrongPasswordException)
       )
     );
 }

@@ -41,13 +41,9 @@ export class UsersService {
   }
 
   update(user: User, entity: Partial<User>): Observable<void> {
-    return from(
-      this.create({
-        ...user,
-        // TODO Исправить типы
-        ...(entity as any)
-      })
-    ).pipe(mapTo(undefined));
+    return from(this.usersRepository.update(user, entity)).pipe(
+      mapTo(undefined)
+    );
   }
 
   addField(user: User, name: string, value: number | string) {
