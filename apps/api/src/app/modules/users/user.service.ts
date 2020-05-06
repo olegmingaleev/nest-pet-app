@@ -50,13 +50,7 @@ export class UsersService {
     );
   }
 
-  update(user: User, entity: Partial<User>): Observable<void> {
-    return from(this.usersRepository.update(user, entity)).pipe(
-      mapTo(undefined)
-    );
-  }
-
-  addField(user: User, name: string, value: number | string) {
-    return from(this.usersRepository.increment(user, name, value));
+  update(user: Partial<User>, entity: Partial<User>): Observable<any> {
+    return from(this.usersRepository.update(user, entity));
   }
 }
