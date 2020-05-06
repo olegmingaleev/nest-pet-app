@@ -32,13 +32,7 @@ export class UsersService {
   }
 
   create(user: CreateUserDto): Observable<User> {
-    // TODO Добавить шаги для проверки пользователя до обращения к базе
-    return from(
-      this.usersRepository.save({
-        ...user,
-        password: Password.hash(user.password)
-      })
-    ).pipe(
+    return from(this.usersRepository.save(user)).pipe(
       // TODO Подумать о рефакторе
       catchError(({ code }) => {
         if (code === 'ER_DUP_ENTRY') {

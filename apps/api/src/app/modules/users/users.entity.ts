@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { Password } from '../../shared/static/password/password.service';
 
 export type UserRolesType = 'host' | 'admin' | 'user';
 
@@ -8,7 +9,14 @@ export class User {
     unique: true
   })
   email: string;
-  @PrimaryColumn() password: string;
+
+  @PrimaryColumn({
+    transformer: {
+      to: pass => Password.hash(pass),
+      from: pass => pass
+    }
+  })
+  password: string;
 
   @PrimaryGeneratedColumn('uuid')
   uid: string;
