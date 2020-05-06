@@ -3,7 +3,6 @@ import { UsersService } from '../users/user.service';
 import { UserDto } from '../auth/dto/User.dto';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Password } from '../../shared/static/password/password.service';
 import { comparePassword } from '../auth/helpers/compare-password.operator';
 
 export const ExistedUsername = HttpException.createBody(
@@ -26,15 +25,15 @@ export class ProfileService {
   }
 
   setPassword(
-    { email }: UserDto,
+    { uid }: UserDto,
     curPassword: string,
     password: string
   ): Observable<void> {
-    return this.usersService.findOne({ email }).pipe(
+    return this.usersService.findOne({ uid }).pipe(
       comparePassword(curPassword),
       switchMap(user =>
         this.usersService.update(user, {
-          password: Password.hash(password)
+          password
         })
       )
     );
