@@ -4,8 +4,7 @@ import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { EMPTY, from, Observable } from 'rxjs';
-import { catchError, mapTo } from 'rxjs/operators';
-import { Password } from '../../shared/static/password/password.service';
+import { catchError } from 'rxjs/operators';
 import { UserExistException } from './exceptions/UserExist.exception';
 
 @Injectable()
@@ -21,14 +20,6 @@ export class UsersService {
 
   findOne(user: Partial<User>, options?: any): Observable<User> {
     return from(this.usersRepository.findOne(user, options));
-  }
-
-  /**
-   * TODO
-   * пофиксить return тип
-   */
-  remove(user: User): Observable<any> {
-    return from(this.usersRepository.delete(user));
   }
 
   create(user: CreateUserDto): Observable<User> {

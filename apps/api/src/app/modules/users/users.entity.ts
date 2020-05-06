@@ -5,21 +5,22 @@ export type UserRolesType = 'host' | 'admin' | 'user';
 
 @Entity()
 export class User {
-  @PrimaryColumn({
+  @PrimaryGeneratedColumn('uuid')
+  uid: string;
+
+  @Column({
     unique: true
   })
   email: string;
 
-  @PrimaryColumn({
+  @Column({
+    select: false,
     transformer: {
       to: pass => Password.hash(pass),
       from: pass => pass
     }
   })
   password: string;
-
-  @PrimaryGeneratedColumn('uuid')
-  uid: string;
 
   @Column({
     unique: true
@@ -30,4 +31,9 @@ export class User {
     default: 'user'
   })
   roles: string;
+
+  @Column({
+    default: false
+  })
+  disabled: boolean;
 }
