@@ -3,9 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/CreateUser.dto';
-import { from, Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { EMPTY, from, Observable } from 'rxjs';
+import { catchError, mapTo } from 'rxjs/operators';
 import { Password } from '../../shared/static/password/password.service';
+import { UserExistException } from './exceptions/UserExist.exception';
 
 @Injectable()
 export class UsersService {
@@ -36,6 +37,15 @@ export class UsersService {
       this.usersRepository.save({
         ...user,
         password: Password.hash(user.password)
+      })
+    ).pipe(
+      // TODO Подумать о рефакторе
+      catchError(({ code }) => {
+        if (code === 'ER_DUP_ENTRY') {
+          throw new UserExistException();
+        }
+
+        return EMPTY;
       })
     );
   }
