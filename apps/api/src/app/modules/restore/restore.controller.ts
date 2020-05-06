@@ -3,7 +3,7 @@ import { RestoreService } from './restore.service';
 import { UsersService } from '../users/user.service';
 import { Request } from 'express';
 import { RestoreTokenGuard } from './guards/restore-token.guard';
-import { Password } from '../../shared/static/password/password.service';
+import { finalize } from 'rxjs/operators';
 
 @Controller('restore')
 export class RestoreController {
@@ -23,10 +23,14 @@ export class RestoreController {
   @Post('password/:token')
   @UseGuards(RestoreTokenGuard)
   setPassword(@Req() req: Request, @Body('password') password: string) {
-    console.log(req.user);
-
-    return this.usersService.update(req.user, {
-      password
-    });
+    return this.usersService
+      .update(req.user, {
+        password
+      })
+      .pipe(
+        finalize(() => {
+          this.restoreService.destroyToken(req.params.token);
+        })
+      );
   }
 }

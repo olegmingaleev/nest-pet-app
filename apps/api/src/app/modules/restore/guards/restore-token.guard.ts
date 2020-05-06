@@ -16,7 +16,7 @@ export class RestoreTokenGuard implements CanActivate {
       return of(false);
     }
 
-    return this.restoreService.validate(token).pipe(
+    return this.restoreService.validateToken(token).pipe(
       tap(({ uid }) => {
         req.user = {
           uid
